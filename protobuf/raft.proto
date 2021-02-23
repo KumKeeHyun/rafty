@@ -1,0 +1,17 @@
+syntax = "proto3";
+package protobuf;
+
+import "requestVote.proto";
+import "appendEntries.proto";
+import "installSnapshot.proto";
+import "client.proto";
+
+service Rafty {
+    rpc RequestVote (RequestVoteReq) returns (RequestVoteResp);
+    rpc AppendEntries (AppendEntriesReq) returns (AppendEntriesResp);
+    rpc InstallSnapshot (stream InstallSnapshotResp) returns (InstallSnapshotResp);
+
+    rpc Write (WriteReq) returns (WriteResp);
+    rpc Read (ReadReq) returns (ReadResp);
+    rpc FindLeader (FindLeaderReq)  returns (FindLeaderResp);
+}

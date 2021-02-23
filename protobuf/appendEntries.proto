@@ -1,0 +1,33 @@
+syntax = "proto3";
+package protobuf;
+
+enum EntryType {
+    Command = 0; // 일반적인 쓰기 작업
+    ConfigChange = 1; // 클러스터 구성 변경
+}
+
+message Entry {
+    uint64 term = 1;
+    uint64 index = 2;
+    uint64 requestID = 3;  // 클라이언트의 요청 ID
+
+    EntryType type = 4;
+    bytes data = 5;
+}
+
+message AppendEntriesReq {
+    uint64 term = 1;
+    uint64 leader = 2;
+
+    uint64 prevLogIndex = 3;
+    uint64 prevLogTerm = 4;
+    uint64 leaderCommit = 5;
+
+    repeated Entry entries = 6;
+}
+
+message AppendEntriesResp {
+    uint64 term = 1;
+    bool success = 2;
+    uint64 lag = 3; // 요청의 entries의 Index가 로컬 로그와 얼마나 차이나는지
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+package protobuf;
+
+message WriteReq {
+    uint64 requestID = 1;
+    bytes command = 2;
+}
+
+message WriteResp {
+    bool success = 1;
+    string error = 2;
+}
+
+message ReadReq {
+    bytes command = 1;
+}
+
+message ReadResp {
+    bool success = 1;
+    string error = 2;
+    bytes result = 3;
+}
+
+message FindLeaderReq {
+}
+
+message FindLeaderResp {
+    int64 leaderID = 1;
+    string leaderAddr = 2;
+}
