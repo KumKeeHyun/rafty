@@ -35,6 +35,10 @@ type clusterConfig struct {
 	peers map[int64]*peer
 }
 
+func (cc *clusterConfig) isQuorum(n int64) bool {
+	return n*2 > int64(len(cc.peers))+1
+}
+
 func newPeer(id int64, addr string) (*peer, error) {
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {

@@ -13,17 +13,19 @@ const (
 
 func newNodeCtx() *nodeCtx {
 	return &nodeCtx{
-		state:     stateFollower,
-		term:      1,
-		votedFor:  -1,
-		opRequest: make(chan nodeCtxReq),
+		state:         stateFollower,
+		term:          1,
+		votedFor:      -1,
+		currentLeader: -1,
+		opRequest:     make(chan nodeCtxReq),
 	}
 }
 
 type nodeCtx struct {
-	state    int
-	term     uint64
-	votedFor int64
+	state         int
+	term          uint64
+	votedFor      int64
+	currentLeader int64
 
 	opRequest chan nodeCtxReq
 }

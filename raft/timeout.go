@@ -7,6 +7,19 @@ import (
 	"time"
 )
 
+var (
+	once  sync.Once
+	timer *timeout
+)
+
+// getTimer 싱글톤 timeout
+func getTimer() *timeout {
+	once.Do(func() {
+		timer = newTimeout(electionTimeoutDuration, minimumElectionTimeoutDuration)
+	})
+	return timer
+}
+
 const (
 	timeoutRun = iota
 	timeoutStop

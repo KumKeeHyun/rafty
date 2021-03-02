@@ -4,6 +4,7 @@ package protobuf;
 enum EntryType {
     Command = 0; // 일반적인 쓰기 작업
     ConfigChange = 1; // 클러스터 구성 변경
+    NoOperation = 2;
 }
 
 message Entry {
