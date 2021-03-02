@@ -62,7 +62,7 @@ func (c *raftyClient) InstallSnapshot(ctx context.Context, opts ...grpc.CallOpti
 }
 
 type Rafty_InstallSnapshotClient interface {
-	Send(*InstallSnapshotResp) error
+	Send(*InstallSnapshotReq) error
 	CloseAndRecv() (*InstallSnapshotResp, error)
 	grpc.ClientStream
 }
@@ -71,7 +71,7 @@ type raftyInstallSnapshotClient struct {
 	grpc.ClientStream
 }
 
-func (x *raftyInstallSnapshotClient) Send(m *InstallSnapshotResp) error {
+func (x *raftyInstallSnapshotClient) Send(m *InstallSnapshotReq) error {
 	return x.ClientStream.SendMsg(m)
 }
 
@@ -203,7 +203,7 @@ func _Rafty_InstallSnapshot_Handler(srv interface{}, stream grpc.ServerStream) e
 
 type Rafty_InstallSnapshotServer interface {
 	SendAndClose(*InstallSnapshotResp) error
-	Recv() (*InstallSnapshotResp, error)
+	Recv() (*InstallSnapshotReq, error)
 	grpc.ServerStream
 }
 
@@ -215,8 +215,8 @@ func (x *raftyInstallSnapshotServer) SendAndClose(m *InstallSnapshotResp) error 
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *raftyInstallSnapshotServer) Recv() (*InstallSnapshotResp, error) {
-	m := new(InstallSnapshotResp)
+func (x *raftyInstallSnapshotServer) Recv() (*InstallSnapshotReq, error) {
+	m := new(InstallSnapshotReq)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
