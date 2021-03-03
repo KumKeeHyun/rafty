@@ -17,6 +17,7 @@ func newLogStorage() *logStorage {
 		Data:      []byte{},
 	})
 	return &logStorage{
+		commitIndex:      0,
 		entries:          entries,
 		snapshotMetadata: nil,
 		opRequest:        make(chan logRequest),
@@ -24,6 +25,7 @@ func newLogStorage() *logStorage {
 }
 
 type logStorage struct {
+	commitIndex      uint64
 	entries          []*pb.Entry // 길이는 항상 1 이상으로 유지해야 함
 	snapshotMetadata *snapshot
 
@@ -87,4 +89,26 @@ func (l *logStorage) appendEntry(entry *pb.Entry) uint64 {
 	entry.Index = l.entries[len(l.entries)-1].Index + 1
 	l.entries = append(l.entries, entry)
 	return entry.Index
+}
+
+func (l *logStorage) getEntryIndex(idx uint64) uint64 {
+	return idx - l.entries[0].Index
+}
+
+func newLogReplication(peers map[int64]*peer, lastLogIndex uint64) *logReplication {
+	lr := &logReplication{
+		nextIndex:  make(map[int64]uint64),
+		matchIndex: make(map[int64]uint64),
+	}
+
+	for peerID := range peers {
+		lr.nextIndex[peerID] = lastLogIndex + 1
+		lr.matchIndex[peerID] = 0
+	}
+	return lr
+}
+
+type logReplication struct {
+	nextIndex  map[int64]uint64
+	matchIndex map[int64]uint64
 }
